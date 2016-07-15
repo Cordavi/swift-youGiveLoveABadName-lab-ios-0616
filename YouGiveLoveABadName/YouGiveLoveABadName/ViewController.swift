@@ -15,11 +15,13 @@ class ViewController: UIViewController {
    
    var shrinkBonJoviHeight: NSLayoutConstraint?
    var enlargeBonJoviHeight: NSLayoutConstraint?
-   //   var bigBonJoviHeight: NSLayoutConstraint?
+   var bigBonJoviHeight: NSLayoutConstraint?
    
    override func viewDidLoad() {
       super.viewDidLoad()
       shrinkExpandButton.tag = 1000
+      shrinkExpandButton.layer.zPosition = 200
+      bonJoviImage.layer.zPosition = 100
       // Do any additional setup after loading the view, typically from a nib.
    }
    
@@ -42,7 +44,8 @@ class ViewController: UIViewController {
             
             UIView.addKeyframeWithRelativeStartTime(2/3.0, relativeDuration: 1/3.0, animations: {
                self.enlargeBonJoviHeight?.active = false
-               self.bonJoviImage.heightAnchor.constraintEqualToAnchor(self.view.heightAnchor, multiplier: 1.0).active = true
+               self.bigBonJoviHeight = self.bonJoviImage.heightAnchor.constraintEqualToAnchor(self.view.heightAnchor, multiplier: 1.0)
+               self.bigBonJoviHeight?.active = true
                self.view.layoutIfNeeded()
             })
             }, completion: {(true) in
@@ -51,13 +54,13 @@ class ViewController: UIViewController {
       } else if sender.tag == 1001 {
          UIView.animateKeyframesWithDuration(0.5, delay: 0, options: [], animations: {
             UIView.addKeyframeWithRelativeStartTime(0.0, relativeDuration: 1/3.0, animations: {
-               self.enlargeBonJoviHeight = self.bonJoviImage.heightAnchor.constraintEqualToAnchor(self.view.heightAnchor, multiplier: 1.1)
+               self.bigBonJoviHeight?.active = false
                self.enlargeBonJoviHeight?.active = true
+               self.view.layoutIfNeeded()
             })
             
             UIView.addKeyframeWithRelativeStartTime(1/3.0, relativeDuration: 1/3.0, animations: {
                self.enlargeBonJoviHeight?.active = false
-               self.shrinkBonJoviHeight = self.bonJoviImage.heightAnchor.constraintEqualToAnchor(self.view.heightAnchor, multiplier: 0.3)
                self.shrinkBonJoviHeight?.active = true
                self.view.layoutIfNeeded()
             })
@@ -65,7 +68,6 @@ class ViewController: UIViewController {
             UIView.addKeyframeWithRelativeStartTime(2/3.0, relativeDuration: 1/3.0, animations: {
                self.shrinkBonJoviHeight?.active = false
                self.enlargeBonJoviHeight?.active = false
-               self.bonJoviImage.heightAnchor.constraintEqualToAnchor(self.bonJoviImage.heightAnchor, multiplier: 1.0).active = true
                self.view.layoutIfNeeded()
             })
             }, completion: {_ in
